@@ -2,7 +2,7 @@
 
 //observe方法遍历对象的key和value
 function observe(obj,fn) {
-    Object.keys(obj).forEach((keys)=>{ defaultReative(obj,keys,obj[keys],fn ) })
+    Object.keys(obj).forEach((keys)=>defaultReative(obj,keys,obj[keys],fn ) );
 }
 
 //defaultReative方法通过Object.defineProperty监听对象的变化
