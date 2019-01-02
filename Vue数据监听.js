@@ -19,16 +19,6 @@ function  defaultReative(obj,keys,val,fn){
 })
 }
 
-//每实例化一次Vue，都调用一次observe方法监听对象属性有没有变化
-class  Vue {
-    constructor(options){
-        this.data = options.data;
-        observe(this.data ,options.render);
-        _proxy.call(this,options.data);
-    }
-
-}
-
 //设置代理，把this.data绑定到this
 function _proxy(data) {
     const  that = this;
@@ -45,6 +35,18 @@ function _proxy(data) {
         })
     })
 }
+
+//每实例化一次Vue，都调用一次observe方法监听对象属性有没有变化
+class  Vue {
+    constructor(options){
+        this.data = options.data;
+        observe(this.data ,options.render);
+        _proxy.call(this,options.data);
+    }
+
+}
+
+
 const vm = new Vue({
     data:{
         name:"Jack"
