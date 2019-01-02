@@ -2,8 +2,7 @@
 
 //observe方法遍历对象的key和value
 function observe(obj,fn) {
-    Object.keys(obj).forEach((keys)=>defaultReative(obj,keys,obj[keys],fn ) );
-}
+    Object.keys(obj).forEach((keys)=>defaultReative(obj,keys,obj[keys],fn ) );}
 
 //defaultReative方法通过Object.defineProperty监听对象的变化
 function  defaultReative(obj,keys,val,fn){
@@ -17,8 +16,7 @@ function  defaultReative(obj,keys,val,fn){
             val = newVal;
             fn();
         }
-
-    })
+})
 }
 
 //每实例化一次Vue，都调用一次observe方法监听对象属性有没有变化
@@ -26,10 +24,27 @@ class  Vue {
     constructor(options){
         this.data = options.data;
         observe(this.data ,options.render);
+        _proxy.call(this,options.data);
     }
 
 }
 
+//设置代理，把this.data绑定到this
+function _proxy(data) {
+    const  that = this;
+    Object.keys(data).forEach((key)=>{
+        Object.defineProperty(that,key,{
+            enumerable:true,
+            configurable:true,
+            get(){
+                return that.data[key];
+            },
+            set(newVal){
+                that.data[key] = newVal;
+            }
+        })
+    })
+}
 const vm = new Vue({
     data:{
         name:"Jack"
@@ -40,5 +55,5 @@ const vm = new Vue({
 })
 
 //test
-vm.data.name = 'x-song';
+vm.name = 'x-song';
 //对象发生变化，触发render方法
